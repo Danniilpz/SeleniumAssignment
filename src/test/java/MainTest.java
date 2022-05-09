@@ -1,15 +1,13 @@
-import com.sun.source.tree.AssertTree;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class MainTest {
     private ChromeDriver driver;
@@ -27,7 +25,7 @@ public class MainTest {
         }
     }
     @Test
-    public void testSelenium() throws InterruptedException {
+    public void testSelenium() throws InterruptedException, FileNotFoundException {
         //initial page
         InitialPage init=new InitialPage(driver);
         init.open();
@@ -44,8 +42,9 @@ public class MainTest {
         init.open();
         LoginPage login=init.login();
         Assert.assertTrue("Login page opened correctly",login.openedCorrectly());
-        String email="wogoh51323@chokxus.com";
-        String password="Test12345";
+        String email=readEmail();
+        String password=readPassword();
+        if(email.equals("")||password.equals("")) throw new IllegalArgumentException();
         MainPage main=login.login(email,password);
         Assert.assertTrue("Main page opened correctly",main.openedCorrectly());
         //user settings
@@ -63,7 +62,26 @@ public class MainTest {
         //logout
         init=user.logout();
         Assert.assertTrue("Init page opened correctly",init.openedCorrectly());
-    }
 
+    }
+    public String readEmail() throws FileNotFoundException {
+        return readFromUserData("email");
+    }
+    public String readPassword() throws FileNotFoundException {
+        return readFromUserData("password");
+    }
+    public String readFromUserData(String parameter) throws FileNotFoundException {
+        String value="";
+        File doc= new File("user.dat");
+        Scanner scanner=new Scanner(doc);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] aux = line.split(" ", 2);
+            if(aux[0].equals(parameter)) {
+                value = aux[1];
+            }
+        }
+        return value;
+    }
 
 }

@@ -10,7 +10,10 @@ public class UserSettings extends BasePage{
     }
     public void editBio(){
         this.waitAndReturnElement(By.xpath("//div[contains(@class,'editable-bio-template')]")).click();
-        this.waitAndReturnElement(By.id("edit_bio")).sendKeys("testBio");
+        String biography=this.generateRandomBiography(10);
+        this.waitAndReturnElement(By.id("edit_bio")).clear();
+        this.waitAndReturnElement(By.id("edit_bio")).sendKeys(biography);
+
         this.waitAndReturnElement(By.xpath("//*[@id='settingsSection']/div[1]/div[1]/div[4]/div[4]/button[2]")).click();
     }
     public void editGender(){
@@ -35,5 +38,16 @@ public class UserSettings extends BasePage{
     public Boolean openedCorrectly() throws InterruptedException {
         this.pageWait(4000);
         return this.getBodyText().contains("Nickname");
+    }
+
+    public String generateRandomBiography(int length){
+        String characters= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder b;
+        b = new StringBuilder(length);
+        for (int i=0;i<length;i++){
+            int j=(int)(characters.length()*Math.random());
+            b.append(characters.charAt(j));
+        }
+        return b.toString();
     }
 }
