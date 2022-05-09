@@ -1,0 +1,9 @@
+build
+.gradle
+.idea
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
+hs_err_pid19568.log
+replay_pid19568.log
